@@ -5,5 +5,6 @@ const categoriesRouter = Router()
 
 categoriesRouter.get("/", categoriesController.getAllCategories)
 categoriesRouter.post("/", categoriesController.addCategory)
+categoriesRouter.delete("/:id", categoriesController.deleteCategory)
 
 module.exports = categoriesRouter

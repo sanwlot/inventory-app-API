@@ -7,15 +7,25 @@ module.exports = {
   },
 
   addCategory: async (req, res) => {
-    const { name, quantity, price, category } = req.body
-    await pool.query(
-      "INSERT INTO products (name, quantity, price, category) VALUES ($1, $2, $3, $4)",
-      [name, quantity, price, category]
-    )
+    const { name } = req.body
+    await pool.query("INSERT INTO categories (name) VALUES ($1)", [name])
     const { rows } = await pool.query(
-      "SELECT * FROM products WHERE name=$1 LIMIT 1",
+      "SELECT * FROM categories WHERE name=$1 LIMIT 1",
       [name]
     )
     res.json(rows[0])
+  },
+  deleteCategory: async (req, res) => {
+    const { id } = req.params
+    /*
+     this sql command added for deleting products from products table upon deletion of relvent category
+      ALTER TABLE products
+      ADD CONSTRAINT fk_category
+      FOREIGN KEY (category_id)
+      REFERENCES categories(id)
+      ON DELETE CASCADE;
+    */
+    await pool.query("DELETE FROM categories WHERE id=$1", [id])
+    res.json({ id })
   },
 }
